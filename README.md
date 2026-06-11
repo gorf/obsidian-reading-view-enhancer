@@ -1,5 +1,7 @@
 # Reading View Enhancer Plugin
 
+> Maintenance mirror of [Galacsh/obsidian-reading-view-enhancer](https://github.com/Galacsh/obsidian-reading-view-enhancer) (upstream unavailable). Original author: Galacsh (MIT).
+
 The Reading View Enhancer is an Obsidian plugin designed to improve the reading experience in Obsidian's reading view mode.
 It provides several features aimed at making the reading view more convenient and comfortable.
 
@@ -113,7 +115,7 @@ By using [Obsidian42-BRAT](https://obsidian.md/plugins?id=obsidian42-brat), you 
 2. Enable Obsidian42-BRAT
 3. Go to Obsidian42-BRAT options page
 4. Beta plugins list > `Add Beta plugin`
-5. Paste this `https://github.com/Galacsh/obsidian-reading-view-enhancer`
+5. Paste your maintenance repo URL (for example `https://github.com/<your-user>/obsidian-reading-view-enhancer`)
 6. Go to `Settings > Community Plugins > Installed plugins`
 7. Refresh the list
 8. Turn on the switch of "Reading View Enhancer" to enable the plugin
