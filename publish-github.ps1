@@ -1,5 +1,5 @@
 param(
-    [string]$RepoName = "obsidian-reading-view-enhancer",
+    [string]$RepoName = "obsidian-block-step-reader",
     [ValidateSet("public", "private")]
     [string]$Visibility = "public"
 )
@@ -48,7 +48,7 @@ if ($remotes -notcontains "origin") {
 
 $user = gh api user -q .login
 $repo = "$user/$RepoName"
-$tag = "v0.2.1-maintenance"
+$tag = "v0.3.0"
 
 gh release view $tag -R $repo *> $null
 if ($LASTEXITCODE -eq 0) {

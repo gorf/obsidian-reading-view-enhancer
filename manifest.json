@@ -1,10 +1,10 @@
 {
-	"id": "reading-view-enhancer",
-	"name": "Reading View Enhancer",
-	"version": "0.2.2",
+	"id": "block-step-reader",
+	"name": "Block Step Reader",
+	"version": "0.3.0",
 	"minAppVersion": "1.8.0",
-	"description": "Enhances reading view. Use arrow keys to navigate between blocks or toggle collapse.",
-	"author": "Galacsh",
-	"authorUrl": "https://github.com/galacsh",
+	"description": "Step through blocks in reading view with keyboard, highlight the current block, and restore your last reading position.",
+	"author": "gorf",
+	"authorUrl": "https://github.com/gorf",
 	"isDesktopOnly": false
 }

@@ -46,7 +46,7 @@ export default class ReadingViewEnhancer extends Plugin {
 		this.addSettingTab(new RveSettingTab(this));
 
 		// Leave a message in the console
-		console.log("Loaded 'Reading View Enhancer'");
+		console.log("Loaded 'Block Step Reader'");
 	}
 
 	/**
@@ -58,7 +58,7 @@ export default class ReadingViewEnhancer extends Plugin {
 		this.styles.cleanup();
 
 		// Leave a message in the console
-		console.log("Unloaded 'Reading View Enhancer'");
+		console.log("Unloaded 'Block Step Reader'");
 	}
 
 	// ===================================================================

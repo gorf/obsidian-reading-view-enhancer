@@ -1,7 +1,7 @@
 {
-	"name": "reading-view-enhancer",
-	"version": "0.2.2",
-	"description": "This is a Obsidian plugin that enhances reading view. Use arrow keys to navigate between blocks or toggle collapse.",
+	"name": "block-step-reader",
+	"version": "0.3.0",
+	"description": "Step through blocks in reading view, highlight the current block, and remember reading position.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",

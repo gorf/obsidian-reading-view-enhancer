@@ -4,7 +4,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $root = $PSScriptRoot
-$dest = Join-Path $VaultPath ".obsidian\plugins\reading-view-enhancer"
+$dest = Join-Path $VaultPath ".obsidian\plugins\block-step-reader"
 
 if (-not (Test-Path (Join-Path $root "main.js"))) {
     Write-Host "main.js not found. Run: npm run build"
@@ -14,4 +14,4 @@ if (-not (Test-Path (Join-Path $root "main.js"))) {
 New-Item -ItemType Directory -Force -Path $dest | Out-Null
 Copy-Item (Join-Path $root "main.js"), (Join-Path $root "manifest.json") -Destination $dest -Force
 Write-Host "Installed to $dest"
-Write-Host "Reload Obsidian community plugins, then enable Reading View Enhancer."
+Write-Host "Reload Obsidian community plugins, then enable Block Step Reader."
