@@ -8,7 +8,7 @@ import {
 	scrollBottomIntoView,
 	scrollTopIntoView,
 } from "./selection-util";
-import { getActiveView, isReadingView } from "src/utils";
+import { getActiveView, getReadingViewContainer, isReadingView } from "src/utils";
 import type { MarkdownViewModeType } from "obsidian";
 
 /**
@@ -47,6 +47,12 @@ export default class SelectionHandler {
 		block.focus();
 		block.addClass(SELECTED_BLOCK);
 		this.selectedBlock = block;
+
+		const view = getActiveView(this.plugin);
+		const container = getReadingViewContainer(view);
+		if (container) {
+			this.plugin.readingPosition.onBlockSelected(block, container);
+		}
 	}
 
 	/**

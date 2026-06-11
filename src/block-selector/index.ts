@@ -23,6 +23,7 @@ import {
 export default class BlockSelector {
 	plugin: ReadingViewEnhancer;
 	selectionHandler: SelectionHandler;
+	private focusTimer: number | null = null;
 
 	/**
 	 * Initialize BlockSelector.
@@ -55,15 +56,34 @@ export default class BlockSelector {
 	}
 
 	autoSelectTopBlock() {
-		if (!this.plugin.settings.autoSelectTopBlock) return;
-
 		const view = getActiveView(this.plugin);
-		if (isReadingView(view)) {
-			const containerEl = getReadingViewContainer(view);
-			if (containerEl) {
-				this.selectTopBlockInTheView(containerEl);
+		if (!isReadingView(view)) return;
+
+		const containerEl = getReadingViewContainer(view);
+		if (!containerEl) return;
+
+		if (this.focusTimer) window.clearTimeout(this.focusTimer);
+
+		this.focusTimer = window.setTimeout(() => {
+			const currentView = getActiveView(this.plugin);
+			if (!isReadingView(currentView)) return;
+
+			const container = getReadingViewContainer(currentView);
+			if (!container) return;
+
+			if (
+				this.plugin.readingPosition.tryRestore(
+					container,
+					this.selectionHandler,
+				)
+			) {
+				return;
 			}
-		}
+
+			if (this.plugin.settings.autoSelectTopBlock) {
+				this.selectTopBlockInTheView(container);
+			}
+		}, this.plugin.settings.readingPositionRestoreDelayMs);
 	}
 
 	/**

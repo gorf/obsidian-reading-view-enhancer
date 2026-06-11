@@ -20,6 +20,10 @@ export interface RveSettings {
 	prevBlockKeys: string;
 	toggleCollapseKeys: string;
 	deselectKeys: string;
+	rememberReadingPosition: boolean;
+	showRestoreNotice: boolean;
+	readingPositionSaveDelayMs: number;
+	readingPositionRestoreDelayMs: number;
 }
 
 export const DEFAULT_SETTINGS: RveSettings = {
@@ -38,6 +42,10 @@ export const DEFAULT_SETTINGS: RveSettings = {
 	prevBlockKeys: "ArrowUp KeyK",
 	toggleCollapseKeys: "ArrowLeft ArrowRight KeyH KeyL",
 	deselectKeys: "Escape",
+	rememberReadingPosition: true,
+	showRestoreNotice: false,
+	readingPositionSaveDelayMs: 500,
+	readingPositionRestoreDelayMs: 300,
 };
 
 // ===================================================================

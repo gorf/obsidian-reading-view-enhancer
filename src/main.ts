@@ -6,11 +6,16 @@ import RveStyles, {
 import { RveSettingTab, RveSettings, DEFAULT_SETTINGS } from "./settings";
 import Commands from "./commands";
 import BlockSelector from "./block-selector";
+import ReadingPositionManager, {
+	type ReadingPositionStore,
+} from "./reading-position";
 
 export default class ReadingViewEnhancer extends Plugin {
 	settings: RveSettings;
+	readingPositions: ReadingPositionStore = {};
 	styles: RveStyles;
 	blockSelector: BlockSelector;
+	readingPosition: ReadingPositionManager;
 
 	/**
 	 * On load,
@@ -30,6 +35,9 @@ export default class ReadingViewEnhancer extends Plugin {
 		// Activate block selector.
 		this.blockSelector = new BlockSelector(this);
 		this.blockSelector.activate();
+
+		this.readingPosition = new ReadingPositionManager(this);
+		this.readingPosition.activate();
 
 		// Register commands
 		new Commands(this).register();
@@ -59,14 +67,26 @@ export default class ReadingViewEnhancer extends Plugin {
 	 * Load settings
 	 */
 	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		const data = (await this.loadData()) as
+			| (Partial<RveSettings> & { readingPositions?: ReadingPositionStore })
+			| null;
+		this.readingPositions = data?.readingPositions ?? {};
+		const { readingPositions: _readingPositions, ...settingsData } = data ?? {};
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, settingsData);
 	}
 
 	/**
 	 * Save settings
 	 */
 	async saveSettings() {
-		await this.saveData(this.settings);
+		await this.savePluginData();
+	}
+
+	async savePluginData() {
+		await this.saveData({
+			...this.settings,
+			readingPositions: this.readingPositions,
+		});
 	}
 
 	/**

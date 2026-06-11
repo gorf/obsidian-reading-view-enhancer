@@ -20,6 +20,9 @@ It provides several features aimed at making the reading view more convenient an
 - **Scrollable code blocks**
   - Make code blocks scrollable instead of line-wrapping
 - **Block highlighting in reading view**
+- **Remember reading position**
+  - Save the current block and scroll position while reading
+  - Restore automatically when reopening a note in reading view
 
 ### Keyboard Block Navigation
 

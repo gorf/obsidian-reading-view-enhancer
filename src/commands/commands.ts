@@ -61,6 +61,40 @@ export const selectTopBlockInTheView: RveCommand = (
 	},
 });
 
+export const saveReadingPosition: RveCommand = (plugin: ReadingViewEnhancer) => ({
+	id: "save-reading-position",
+	name: "Save reading position",
+	checkCallback: (checking: boolean): boolean => {
+		const activeView = getActiveView(plugin);
+		if (checking) {
+			return isReadingView(activeView) && !isNotEnabled(plugin) && !isMobileAndDisabled(plugin);
+		}
+		plugin.readingPosition.saveNow();
+		return true;
+	},
+});
+
+export const restoreReadingPosition: RveCommand = (plugin: ReadingViewEnhancer) => ({
+	id: "restore-reading-position",
+	name: "Restore reading position",
+	checkCallback: (checking: boolean): boolean => {
+		const activeView = getActiveView(plugin);
+		if (checking) {
+			return isReadingView(activeView) && !isNotEnabled(plugin) && !isMobileAndDisabled(plugin);
+		}
+		plugin.readingPosition.restoreNow(plugin.blockSelector.selectionHandler);
+		return true;
+	},
+});
+
+export const clearReadingPositions: RveCommand = (plugin: ReadingViewEnhancer) => ({
+	id: "clear-reading-positions",
+	name: "Clear all reading positions",
+	callback: () => {
+		plugin.readingPosition.clearAll();
+	},
+});
+
 export const toggleBlockHighlight: RveCommand = (
 	plugin: ReadingViewEnhancer
 ) => ({
