@@ -6,7 +6,7 @@ This guide explains how to publish **Block Step Reader（渐读）** to the offi
 
 - [x] Public repo: https://github.com/gorf/obsidian-block-step-reader
 - [x] `README.md`, `LICENSE`, `manifest.json` on `master`
-- [x] GitHub release **v0.5.1** with `main.js`, `manifest.json`, `versions.json`
+- [x] GitHub release **0.5.1** (tag must match manifest, **no `v` prefix**) with `main.js`, `manifest.json`, `versions.json`
 - [x] Ko-fi support URL in `manifest.json` → `https://ko-fi.com/bigmonk`
 - [x] Fork of `obsidian-releases` with listing entry on branch `add-block-step-reader`
 
@@ -24,7 +24,7 @@ Official process: https://docs.obsidian.md/Plugins/Releasing/Submit+your+plugin
 5. Agree to the [developer policies](https://docs.obsidian.md/Developer+policies)
 6. Click **Submit**
 
-Obsidian reads `manifest.json` from the default branch and installs release assets from the tag matching `version` (currently **0.5.1** → tag **v0.5.1**).
+Obsidian reads `manifest.json` from the default branch and installs release assets from the tag matching `version` exactly (currently **0.5.1** → tag **`0.5.1`**, not `v0.5.1`).
 
 After automated review passes, publish from the directory UI. Users can then search **Block Step Reader** in Settings → Community plugins.
 
@@ -60,7 +60,7 @@ Entry added to `community-plugins.json`:
 
 1. Bump `version` in `manifest.json`, `package.json`, and `versions.json`
 2. `npm run build`
-3. Create GitHub release with `main.js`, `manifest.json`, `versions.json`
+3. Create GitHub release with tag equal to `manifest.json` version (e.g. `0.5.2`, not `v0.5.2`) and attach `main.js`, `manifest.json`, `versions.json`
 4. Users update from Community plugins — no need to resubmit unless Obsidian requests changes
 
 ```powershell
