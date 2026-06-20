@@ -1,5 +1,6 @@
 import { Setting, ToggleComponent } from "obsidian";
 import ReadingViewEnhancer from "src/main";
+import { saveSettingsVoid } from "src/utils/settings";
 
 const description = [
 	"Set collapse indicators to be shown on the right side.",
@@ -34,7 +35,7 @@ export default class CollapseIndicatorsOnTheRightSideSetting extends Setting {
 			.setValue(settings.collapseIndicatorOnTheRightSide)
 			.onChange((changed) => {
 				settings.collapseIndicatorOnTheRightSide = changed;
-				this.plugin.saveSettings();
+				saveSettingsVoid(this.plugin);
 				this.plugin.applyCollapseIndicatorOnTheRightSide(true);
 			});
 	}

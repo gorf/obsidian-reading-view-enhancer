@@ -5,6 +5,10 @@ const BODY_CLASSES = [
 	"bsr-scrollable-code",
 ] as const;
 
+function getBody(): HTMLElement {
+	return window.activeDocument.body;
+}
+
 export function applyBlockColorCss(blockColor: {
 	color: string;
 	transparency: number;
@@ -14,7 +18,7 @@ export function applyBlockColorCss(blockColor: {
 		/\d+\s*\)$/,
 		`${percentage})`,
 	);
-	document.body.setCssProps({
+	getBody().setCssProps({
 		"--bsr-block-color": colorWithAlpha,
 	});
 }
@@ -23,7 +27,7 @@ export function setBodyFeature(
 	className: (typeof BODY_CLASSES)[number],
 	active: boolean,
 ): void {
-	document.body.toggleClass(className, active);
+	getBody().toggleClass(className, active);
 }
 
 export function applyReadingFeatures(settings: {
@@ -49,7 +53,7 @@ export function applyReadingFeatures(settings: {
 
 export function cleanupReadingFeatures(): void {
 	for (const className of BODY_CLASSES) {
-		document.body.removeClass(className);
+		getBody().removeClass(className);
 	}
 }
 

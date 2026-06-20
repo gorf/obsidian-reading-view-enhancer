@@ -1,5 +1,6 @@
 import { Setting, SliderComponent } from "obsidian";
 import ReadingViewEnhancer from "src/main";
+import { saveSettingsVoid } from "src/utils/settings";
 
 /**
  * Block color transparency setting component
@@ -30,7 +31,7 @@ export default class BlockTransparencySetting extends Setting {
 			.onChange((changed) => {
 				// save on change
 				settings.blockColor.transparency = changed;
-				this.plugin.saveSettings();
+				saveSettingsVoid(this.plugin);
 				this.plugin.applyBlockColor(true);
 			});
 	}

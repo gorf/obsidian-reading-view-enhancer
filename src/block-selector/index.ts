@@ -9,53 +9,41 @@ import {
 	isReadingView,
 } from "src/utils";
 
-/**
- * BlockSelector enables to navigate between blocks and toggle collapse.
- *
- * Block elements are elements that are having block level elements.
- * For example, a paragraph is a block element.
- *
- * You can select a block by clicking on it and then use arrow keys to navigate between blocks.
- * For selected block, the background color will be changed.
- * You can also use `ArrowLeft` and `ArrowRight` to toggle collapse.
- * Collapsible blocks have `collapse-indicator` or `callout-fold` class.
- */
 export default class BlockSelector {
 	plugin: ReadingViewEnhancer;
 	selectionHandler: SelectionHandler;
 	private focusTimer: number | null = null;
 
-	/**
-	 * Initialize BlockSelector.
-	 * Register markdown post processor to blockify some elements.
-	 *
-	 * @param plugin {ReadingViewEnhancer} Plugin instance
-	 */
+	private readonly blockifyProcessor = (
+		element: HTMLElement,
+		context: MarkdownPostProcessorContext,
+	): void => {
+		this.blockify(element, context);
+	};
+
+	private readonly onLayoutOrLeafChange = (): void => {
+		this.autoSelectTopBlock();
+	};
+
 	constructor(plugin: ReadingViewEnhancer) {
 		this.plugin = plugin;
 		this.selectionHandler = new SelectionHandler(plugin);
 	}
 
-	/**
-	 * Activate BlockSelector
-	 */
-	activate() {
-		this.plugin.registerMarkdownPostProcessor(this.blockify.bind(this));
+	activate(): void {
+		this.plugin.registerMarkdownPostProcessor(this.blockifyProcessor);
 		this.plugin.registerEvent(
-			this.plugin.app.workspace.on(
-				"layout-change",
-				this.autoSelectTopBlock.bind(this)
-			)
+			this.plugin.app.workspace.on("layout-change", this.onLayoutOrLeafChange),
 		);
 		this.plugin.registerEvent(
 			this.plugin.app.workspace.on(
 				"active-leaf-change",
-				this.autoSelectTopBlock.bind(this)
-			)
+				this.onLayoutOrLeafChange,
+			),
 		);
 	}
 
-	autoSelectTopBlock() {
+	autoSelectTopBlock(): void {
 		const view = getActiveView(this.plugin);
 		if (!isReadingView(view)) return;
 
@@ -86,32 +74,20 @@ export default class BlockSelector {
 		}, this.plugin.settings.readingPositionRestoreDelayMs);
 	}
 
-	/**
-	 * Select top block in the view
-	 *
-	 * @param viewContainer {HTMLElement} View container element
-	 */
-	selectTopBlockInTheView(viewContainer: HTMLElement) {
+	selectTopBlockInTheView(viewContainer: HTMLElement): void {
 		this.selectionHandler.selectTopBlockInTheView(viewContainer);
 	}
 
-	toggleBlockHighlight() {
-		this.selectionHandler.selectedBlockHighlight();
+	toggleBlockHighlight(): void {
+		void this.selectionHandler.selectedBlockHighlight();
 	}
 
-	/**
-	 * Blockify some elements.
-	 * If container is not initialized, initialize it.
-	 * Transform some elements to block elements.
-	 */
 	private blockify(
 		element: HTMLElement,
-		context: MarkdownPostProcessorContext
-	) {
-		// If block selector is disabled, do nothing
+		context: MarkdownPostProcessorContext,
+	): void {
 		if (!this.plugin.settings.enableBlockSelector) return;
 
-		// If it's mobile but block selector is disabled on mobile, do nothing
 		if (
 			(Platform.isMobile || Platform.isMobileApp) &&
 			this.plugin.settings.disableBlockSelectorOnMobile
@@ -119,77 +95,50 @@ export default class BlockSelector {
 			return;
 		}
 
-		// @ts-ignore
-		const container = context?.containerEl;
-		if (this.isContainerNotInitialized(container)) {
+		const container = this.getPostProcessorContainer(element);
+		if (container && this.isContainerNotInitialized(container)) {
 			this.initializeContainer(container);
 		}
 
 		this.elementsToBlocks(element, context);
 	}
 
-	/**
-	 * Check if container is initialized.
-	 *
-	 * @param container Container element
-	 * @returns True if container is initialized
-	 */
-	private isContainerNotInitialized(container: HTMLElement) {
-		return (
-			container instanceof HTMLElement && !container.hasClass(BLOCK_SELECTOR)
-		);
+	private getPostProcessorContainer(element: HTMLElement): HTMLElement | null {
+		const container = element.closest(".markdown-reading-view");
+		return container?.instanceOf(HTMLElement) ? container : null;
 	}
 
-	/**
-	 * Initialize container.
-	 * Add some event listeners to container.
-	 *
-	 * @param container Container element
-	 */
-	private initializeContainer(container: HTMLElement) {
-		// Mark container as initialized
+	private isContainerNotInitialized(container: HTMLElement): boolean {
+		return !container.hasClass(BLOCK_SELECTOR);
+	}
+
+	private initializeContainer(container: HTMLElement): void {
 		container.addClass(BLOCK_SELECTOR);
 
-		// Mouse and touch events handlers to detect tap or click event
 		container.addEventListener(
 			"mousedown",
-			this.selectionHandler.handleMouseTouchStart.bind(this.selectionHandler)
+			this.selectionHandler.onMouseTouchStart,
 		);
 		container.addEventListener(
 			"touchstart",
-			this.selectionHandler.handleMouseTouchStart.bind(this.selectionHandler)
+			this.selectionHandler.onMouseTouchStart,
 		);
 		container.addEventListener(
 			"mouseup",
-			this.selectionHandler.handleMouseTouchEnd.bind(this.selectionHandler)
+			this.selectionHandler.onMouseTouchEnd,
 		);
 		container.addEventListener(
 			"touchend",
-			this.selectionHandler.handleMouseTouchEnd.bind(this.selectionHandler)
+			this.selectionHandler.onMouseTouchEnd,
 		);
-
-		// On focusout, deselect block element
-		container.addEventListener(
-			"focusout",
-			this.selectionHandler.deselect.bind(this.selectionHandler)
-		);
-
-		// On keydown, navigate between blocks or toggle collapse
-		container.addEventListener(
-			"keydown",
-			this.selectionHandler.onKeyDown.bind(this.selectionHandler)
-		);
+		container.addEventListener("focusout", this.selectionHandler.onDeselect);
+		container.addEventListener("keydown", this.selectionHandler.onKeyDown);
 	}
 
-	/**
-	 * Set `data-rve-block` attribute to block elements.
-	 *
-	 * @param element Element to start searching
-	 */
 	private elementsToBlocks(
 		element: HTMLElement,
-		context: MarkdownPostProcessorContext
-	) {
+		context: MarkdownPostProcessorContext,
+	): void {
 		const section = context.getSectionInfo(element);
 		const elements = element.querySelectorAll(BLOCKS.join(", "));
 		elements.forEach((el) => {

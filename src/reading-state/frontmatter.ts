@@ -18,13 +18,13 @@ export function readUserStateFromCache(
 ): UserReadingState | null {
 	const cache = plugin.app.metadataCache.getFileCache(file);
 	const bsr = cache?.frontmatter?.[BSR_FRONTMATTER_KEY];
-	if (!bsr || typeof bsr !== "object") return null;
+	if (!isRecord(bsr)) return null;
 
 	const userId = getUserId(plugin);
-	const raw = (bsr as Record<string, unknown>)[userId];
-	if (!raw || typeof raw !== "object") return null;
+	const raw = bsr[userId];
+	if (!isRecord(raw)) return null;
 
-	return normalizeUserState(raw as Record<string, unknown>);
+	return normalizeUserState(raw);
 }
 
 export async function writeUserState(
@@ -107,6 +107,10 @@ export function buildPositionPatch(
 		totalWords,
 		wordsRead,
 	};
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 function stripFrontmatter(text: string): string {

@@ -1,5 +1,6 @@
 import { Setting, ToggleComponent } from "obsidian";
 import ReadingViewEnhancer from "src/main";
+import { saveSettingsVoid } from "src/utils/settings";
 
 /**
  * Always on collapse indicator setting component
@@ -27,7 +28,7 @@ export default class AlwaysOnCollapseIndicatorSetting extends Setting {
 
 		toggle.setValue(settings.alwaysOnCollapseIndicator).onChange((changed) => {
 			settings.alwaysOnCollapseIndicator = changed;
-			this.plugin.saveSettings();
+			saveSettingsVoid(this.plugin);
 			this.plugin.applyAlwaysOnCollapse(true);
 		});
 	}

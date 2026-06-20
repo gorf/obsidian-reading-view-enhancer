@@ -1,5 +1,6 @@
 import { Setting, ToggleComponent } from "obsidian";
 import ReadingViewEnhancer from "src/main";
+import { saveSettingsVoid } from "src/utils/settings";
 
 /**
  * Auto select top block setting component
@@ -29,7 +30,7 @@ export default class AutoSelectTopBlockSetting extends Setting {
 
 		toggle.setValue(settings.autoSelectTopBlock).onChange((changed) => {
 			settings.autoSelectTopBlock = changed;
-			this.plugin.saveSettings();
+			saveSettingsVoid(this.plugin);
 		});
 	}
 }

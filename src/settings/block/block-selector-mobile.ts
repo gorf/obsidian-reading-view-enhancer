@@ -1,5 +1,6 @@
 import { Setting, ToggleComponent } from "obsidian";
 import ReadingViewEnhancer from "src/main";
+import { saveSettingsVoid } from "src/utils/settings";
 
 /**
  * Disable block selector on mobile setting component
@@ -27,7 +28,7 @@ export default class DisableBlockSelectorOnMobileSetting extends Setting {
 		// save on change
 		toggle.onChange((changed) => {
 			this.plugin.settings.disableBlockSelectorOnMobile = changed;
-			this.plugin.saveSettings();
+			saveSettingsVoid(this.plugin);
 		});
 	}
 }

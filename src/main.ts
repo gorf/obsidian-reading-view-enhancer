@@ -38,7 +38,7 @@ export default class ReadingViewEnhancer extends Plugin {
 		console.log(t(this, "plugin.loaded"));
 	}
 
-	async onunload() {
+	onunload(): void {
 		cleanupReadingFeatures();
 		console.log(t(this, "plugin.unloaded"));
 	}

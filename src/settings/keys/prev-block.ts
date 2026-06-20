@@ -1,5 +1,6 @@
 import { Setting, TextAreaComponent } from "obsidian";
 import ReadingViewEnhancer from "src/main";
+import { saveSettingsVoid } from "src/utils/settings";
 
 /**
  * Previous block keys setting component
@@ -22,7 +23,7 @@ export default class PrevBlockKeysSetting extends Setting {
 		// save on change
 		textArea.onChange((changed) => {
 			this.plugin.settings.prevBlockKeys = changed;
-			this.plugin.saveSettings();
+			saveSettingsVoid(this.plugin);
 		});
 	}
 }

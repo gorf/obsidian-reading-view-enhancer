@@ -1,5 +1,6 @@
 import { Setting, ToggleComponent } from "obsidian";
 import ReadingViewEnhancer from "src/main";
+import { saveSettingsVoid } from "src/utils/settings";
 
 const description = [
 	"Align checkboxes(task list item) to indentation guide line.",
@@ -33,7 +34,7 @@ export default class AlignCheckboxToIndentationGuide extends Setting {
 			.setValue(settings.alignCheckboxToIndentationGuide)
 			.onChange((changed) => {
 				settings.alignCheckboxToIndentationGuide = changed;
-				this.plugin.saveSettings();
+				saveSettingsVoid(this.plugin);
 				this.plugin.applyAlignCheckboxToIndentationGuide(true);
 			});
 	}

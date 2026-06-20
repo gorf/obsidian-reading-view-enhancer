@@ -1,6 +1,7 @@
 import { toHex, toRgba } from "color2k";
 import { ButtonComponent, ColorComponent, Setting } from "obsidian";
 import ReadingViewEnhancer from "src/main";
+import { saveSettingsVoid } from "src/utils/settings";
 
 /**
  * Block color setting component
@@ -31,7 +32,7 @@ export default class BlockColorSetting extends Setting {
 		color.setValue(toHex(settings.blockColor.color)).onChange((changed) => {
 			// save on change
 			settings.blockColor.color = toRgba(changed);
-			this.plugin.saveSettings();
+			saveSettingsVoid(this.plugin);
 			this.plugin.applyBlockColor(true);
 		});
 		this.addButton((button) => this.accentColorButton(button, color));
@@ -50,7 +51,7 @@ export default class BlockColorSetting extends Setting {
 			color.setValue(toHex(accentColor));
 
 			this.plugin.settings.blockColor.color = accentColor;
-			this.plugin.saveSettings();
+			saveSettingsVoid(this.plugin);
 			this.plugin.applyBlockColor(true);
 		});
 	}

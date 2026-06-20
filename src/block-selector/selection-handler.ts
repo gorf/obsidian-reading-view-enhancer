@@ -34,6 +34,22 @@ export default class SelectionHandler {
 		this.deselectKeys = plugin.settings.deselectKeys.split(" ");
 	}
 
+	readonly onMouseTouchStart = (e: MouseEvent | TouchEvent): void => {
+		this.handleMouseTouchStart(e);
+	};
+
+	readonly onMouseTouchEnd = (e: MouseEvent | TouchEvent): void => {
+		this.handleMouseTouchEnd(e);
+	};
+
+	readonly onDeselect = (): void => {
+		this.deselect();
+	};
+
+	readonly onKeyDown = (e: KeyboardEvent): void => {
+		this.handleKeyDown(e);
+	};
+
 	isSelected(block: HTMLElement) {
 		return block === this.selectedBlock;
 	}
@@ -104,7 +120,7 @@ export default class SelectionHandler {
 	private handleTap(e: MouseEvent | TouchEvent) {
 		const target = e.target as HTMLElement;
 		const block = target.closest(`[${BLOCK_ATTR}=true]`);
-		if (block instanceof HTMLElement) {
+		if (block?.instanceOf(HTMLElement)) {
 			// if already selected, toggle collapse
 			if (this.isSelected(block)) {
 				this.toggleCollapse(block);
@@ -133,7 +149,7 @@ export default class SelectionHandler {
 	 *
 	 * @param e {KeyboardEvent} Keyboard event
 	 */
-	onKeyDown(e: KeyboardEvent) {
+	private handleKeyDown(e: KeyboardEvent) {
 		if (!isReadingView(getActiveView(this.plugin))) return;
 
 		const block = e.target as HTMLElement;
@@ -166,7 +182,7 @@ export default class SelectionHandler {
 			scrollBottomIntoView(block);
 		} else {
 			const next = findNextBlock(block);
-			if (next) this.select(next as HTMLElement, { center: true });
+			if (next) this.select(next, { center: true });
 		}
 	}
 
@@ -180,7 +196,7 @@ export default class SelectionHandler {
 			scrollTopIntoView(block);
 		} else {
 			const prev = findPreviousBlock(block);
-			if (prev) this.select(prev as HTMLElement, { center: true });
+			if (prev) this.select(prev, { center: true });
 		}
 	}
 
@@ -207,7 +223,9 @@ export default class SelectionHandler {
 		}
 
 		const topBlock = blocks[topIndex];
-		this.select(topBlock as HTMLElement);
+		if (topBlock?.instanceOf(HTMLElement)) {
+			this.select(topBlock);
+		}
 	}
 
 	/**
@@ -266,12 +284,11 @@ export default class SelectionHandler {
 		view.containerEl.removeClass("bsr-hide-view");
 	}
 
-	private changeMode(mode: MarkdownViewModeType) {
+	private changeMode(mode: MarkdownViewModeType): void {
 		const view = getActiveView(this.plugin);
 		if (view == null) return;
 
 		const state = view.getState();
-
-		view.setState({ ...state, mode }, { history: true });
+		void view.setState({ ...state, mode }, { history: true });
 	}
 }

@@ -71,7 +71,7 @@ export default class ReadingPositionManager {
 
 		this.queueSave(container, block);
 		this.updateProgressUi(block, container);
-		this.maybeAutoMarkRead(block, container);
+		void this.maybeAutoMarkRead(block, container);
 	}
 
 	tryRestore(
@@ -149,7 +149,7 @@ export default class ReadingPositionManager {
 
 	clearAll() {
 		this.plugin.readingPositions = {};
-		this.plugin.savePluginData();
+		void this.plugin.savePluginData();
 		new Notice(t(this.plugin, "notice.clearedLegacy"));
 	}
 

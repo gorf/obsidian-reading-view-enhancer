@@ -53,7 +53,11 @@ body.bsr-scrollable-code .markdown-reading-view .markdown-preview-section div > 
 }
 
 .bsr-hide-view {
-	visibility: hidden !important;
+	visibility: hidden;
+}
+
+body .workspace-leaf.mod-active .view-content.bsr-hide-view {
+	visibility: hidden;
 }
 
 .bsr-progress-bar {

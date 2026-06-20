@@ -4,7 +4,7 @@ import {
 	getReadingViewContainer,
 	isReadingView,
 } from "src/utils";
-import { Platform } from "obsidian";
+import { MarkdownView, Platform } from "obsidian";
 import { t } from "src/i18n";
 import { activateReadingLibrary } from "src/reading-library";
 import type { RveCommand } from ".";
@@ -17,9 +17,9 @@ export const rerenderAllReadingViews: RveCommand = (
 	callback: () => {
 		const { workspace } = plugin.app;
 		workspace.getLeavesOfType("markdown").forEach((leaf) => {
-			if (leaf.view.getState().mode === "preview") {
-				// @ts-ignore
-				leaf.view.previewMode?.rerender(true);
+			const view = leaf.view;
+			if (view instanceof MarkdownView && view.getState().mode === "preview") {
+				view.previewMode.rerender(true);
 			}
 		});
 	},
@@ -77,7 +77,7 @@ export const restoreReadingPosition: RveCommand = (plugin: ReadingViewEnhancer) 
 				!isMobileAndDisabled(plugin)
 			);
 		}
-		plugin.readingPosition.restoreNow(plugin.blockSelector.selectionHandler);
+		void plugin.readingPosition.restoreNow(plugin.blockSelector.selectionHandler);
 		return true;
 	},
 });

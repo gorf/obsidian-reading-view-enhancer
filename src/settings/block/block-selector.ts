@@ -1,5 +1,6 @@
 import { Setting, ToggleComponent } from "obsidian";
 import ReadingViewEnhancer from "src/main";
+import { saveSettingsVoid } from "src/utils/settings";
 
 /**
  * Enable block selector setting component
@@ -27,7 +28,7 @@ export default class EnableBlockSelectorSetting extends Setting {
 		// save on change
 		toggle.onChange((changed) => {
 			this.plugin.settings.enableBlockSelector = changed;
-			this.plugin.saveSettings();
+			saveSettingsVoid(this.plugin);
 		});
 	}
 }

@@ -26,7 +26,7 @@ export async function activateReadingLibrary(
 	const existing = workspace.getLeavesOfType(READING_LIBRARY_VIEW_TYPE);
 
 	if (existing.length > 0) {
-		workspace.revealLeaf(existing[0]);
+		void workspace.revealLeaf(existing[0]);
 		return;
 	}
 
@@ -38,7 +38,7 @@ export async function activateReadingLibrary(
 		active: true,
 	});
 
-	workspace.revealLeaf(leaf);
+	void workspace.revealLeaf(leaf);
 }
 
 export function getReadingLibraryView(

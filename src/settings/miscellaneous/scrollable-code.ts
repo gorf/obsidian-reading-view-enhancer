@@ -1,5 +1,6 @@
 import { Setting, ToggleComponent } from "obsidian";
 import ReadingViewEnhancer from "src/main";
+import { saveSettingsVoid } from "src/utils/settings";
 
 /**
  * Scrollable code setting component
@@ -22,7 +23,7 @@ export default class ScrollableCodeSetting extends Setting {
 		// save on change
 		toggle.onChange((changed) => {
 			this.plugin.settings.scrollableCode = changed;
-			this.plugin.saveSettings();
+			saveSettingsVoid(this.plugin);
 			this.plugin.applyScrollableCode(true);
 		});
 	}

@@ -1,5 +1,6 @@
 import { Setting, TextAreaComponent } from "obsidian";
 import ReadingViewEnhancer from "src/main";
+import { saveSettingsVoid } from "src/utils/settings";
 
 /**
  * Toggle collapse keys setting component
@@ -22,7 +23,7 @@ export default class ToggleCollapseKeysSetting extends Setting {
 		// save on change
 		textArea.onChange((changed) => {
 			this.plugin.settings.toggleCollapseKeys = changed;
-			this.plugin.saveSettings();
+			saveSettingsVoid(this.plugin);
 		});
 	}
 }
