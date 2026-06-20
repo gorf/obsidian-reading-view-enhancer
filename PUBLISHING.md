@@ -1,92 +1,74 @@
 # Publishing to the Obsidian Community Plugin Marketplace
 
-This guide explains how to publish **Block Step Reader** to the official Obsidian community plugin directory.
+This guide explains how to publish **Block Step Reader（渐读）** to the official Obsidian community plugin directory.
 
-## Prerequisites
+## Prerequisites (done)
 
-1. A public GitHub repository: `https://github.com/gorf/obsidian-block-step-reader`
-2. A GitHub release for each published version
-3. Each release must attach at least:
-   - `main.js`
-   - `manifest.json`
-   - `versions.json`
+- [x] Public repo: https://github.com/gorf/obsidian-block-step-reader
+- [x] `README.md`, `LICENSE`, `manifest.json` on `master`
+- [x] GitHub release **v0.5.1** with `main.js`, `manifest.json`, `versions.json`
+- [x] Ko-fi support URL in `manifest.json` → `https://ko-fi.com/bigmonk`
+- [x] Fork of `obsidian-releases` with listing entry on branch `add-block-step-reader`
 
-## Build a release locally
+## Step 1: Submit via Obsidian Community (recommended)
 
-```powershell
-npm install
-npm run build
-```
+Official process: https://docs.obsidian.md/Plugins/Releasing/Submit+your+plugin
 
-Then create a GitHub release:
+1. Open https://community.obsidian.md and sign in with your **Obsidian account**
+2. Link your **GitHub account** (`gorf`) in your profile
+3. Sidebar → **Plugins** → **New plugin**
+4. Repository URL:
+   ```
+   https://github.com/gorf/obsidian-block-step-reader
+   ```
+5. Agree to the [developer policies](https://docs.obsidian.md/Developer+policies)
+6. Click **Submit**
 
-```powershell
-.\publish-github.ps1
-```
+Obsidian reads `manifest.json` from the default branch and installs release assets from the tag matching `version` (currently **0.5.1** → tag **v0.5.1**).
 
-Or manually:
+After automated review passes, publish from the directory UI. Users can then search **Block Step Reader** in Settings → Community plugins.
 
-```powershell
-gh release create v0.5.0 main.js manifest.json versions.json `
-  --title "0.5.0" `
-  --notes "Reading library, i18n, frontmatter progress, Buy Me a Coffee"
-```
+## Step 2: Alternative — PR to obsidian-releases
 
-## Submit to Obsidian
+A listing entry is prepared on:
 
-1. Fork [obsidianmd/obsidian-releases](https://github.com/obsidianmd/obsidian-releases)
-2. Edit `community-plugins.json`
-3. Add an entry like:
+- Fork: https://github.com/gorf/obsidian-releases
+- Branch: `add-block-step-reader`
+
+Open a pull request to upstream (if the web form asks for it, or if you prefer the classic flow):
+
+https://github.com/obsidianmd/obsidian-releases/compare/master...gorf:obsidian-releases:add-block-step-reader?expand=1
+
+Entry added to `community-plugins.json`:
 
 ```json
 {
   "id": "block-step-reader",
   "name": "Block Step Reader",
   "author": "gorf",
-  "description": "Reader-like step reading in Obsidian with a reading library, progress in frontmatter, and multi-language UI.",
+  "description": "Reader-like step reading: block navigation, reading library, per-user progress in frontmatter, and multi-language UI.",
   "repo": "gorf/obsidian-block-step-reader"
 }
 ```
 
-4. Open a pull request to `obsidianmd/obsidian-releases`
-5. Wait for Obsidian team review
+## After approval
 
-Official docs: https://docs.obsidian.md/Plugins/Releasing/Submit+your+plugin
+1. Announce in [Share & showcase](https://forum.obsidian.md/c/share-showcase/9)
+2. Optional: `#updates` on [Discord](https://discord.gg/veuWUTm) (requires developer role)
 
-## Before each new marketplace version
+## Future releases
 
-1. Bump `version` in `manifest.json` and `package.json`
-2. Add the new version to `versions.json`
-3. Build: `npm run build`
-4. Create a GitHub release with the three required files
-5. After merge into the community directory, users can install from **Settings → Community plugins**
+1. Bump `version` in `manifest.json`, `package.json`, and `versions.json`
+2. `npm run build`
+3. Create GitHub release with `main.js`, `manifest.json`, `versions.json`
+4. Users update from Community plugins — no need to resubmit unless Obsidian requests changes
 
-## Support (Ko-fi)
+```powershell
+.\publish-github.ps1
+```
 
-The plugin exposes support via:
-
-- `manifest.json` → `fundingUrl`
-- Plugin settings → **Support** section
-
-Support URL: `https://ko-fi.com/bigmonk`
-
-Update the URL in:
-
-- `manifest.json`
-- `src/constants.ts` → `SUPPORT_KOFI_URL`
-
-## BRAT beta testing
-
-Users can install pre-release builds with [BRAT](https://github.com/TfTHacker/obsidian42-brat):
+## BRAT (beta)
 
 ```
 https://github.com/gorf/obsidian-block-step-reader
 ```
-
-## Checklist
-
-- [ ] Ko-fi support URL configured
-- [ ] GitHub release created with `main.js`, `manifest.json`, `versions.json`
-- [ ] README documents features and frontmatter schema
-- [ ] PR opened to `obsidianmd/obsidian-releases`
-- [ ] Plugin tested on desktop and mobile reading view
