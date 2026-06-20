@@ -1,6 +1,6 @@
 # Block Step Reader（渐读）
 
-中文名：**渐读** · 英文名：Block Step Reader
+中文名：**渐读** · 英文名：Block Step Reader · [中文说明](README.zh-CN.md)
 
 > Fork and continuation of [Galacsh/obsidian-reading-view-enhancer](https://github.com/Galacsh/obsidian-reading-view-enhancer) (upstream unavailable). Original block navigation by Galacsh (MIT). Additional maintenance and reading-position features by [gorf](https://github.com/gorf).
 

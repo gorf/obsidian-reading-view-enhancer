@@ -17,7 +17,10 @@ export function readUserStateFromCache(
 	file: TFile,
 ): UserReadingState | null {
 	const cache = plugin.app.metadataCache.getFileCache(file);
-	const bsr = cache?.frontmatter?.[BSR_FRONTMATTER_KEY];
+	const frontmatter = cache?.frontmatter as unknown;
+	if (!isRecord(frontmatter)) return null;
+
+	const bsr = frontmatter[BSR_FRONTMATTER_KEY];
 	if (!isRecord(bsr)) return null;
 
 	const userId = getUserId(plugin);
@@ -34,17 +37,19 @@ export async function writeUserState(
 ): Promise<void> {
 	const userId = getUserId(plugin);
 
-	await plugin.app.fileManager.processFrontMatter(file, (frontmatter) => {
-		if (!frontmatter[BSR_FRONTMATTER_KEY]) {
-			frontmatter[BSR_FRONTMATTER_KEY] = {};
-		}
+	await plugin.app.fileManager.processFrontMatter(file, (rawFrontmatter) => {
+		const frontmatter = rawFrontmatter as unknown;
+		if (!isRecord(frontmatter)) return;
 
-		const bsr = frontmatter[BSR_FRONTMATTER_KEY] as Record<
-			string,
-			Record<string, unknown>
-		>;
-		const current = normalizeUserState(bsr[userId] ?? {});
+		const existingBsr = frontmatter[BSR_FRONTMATTER_KEY];
+		const bsr: Record<string, unknown> = isRecord(existingBsr)
+			? existingBsr
+			: {};
+
+		const userRaw = bsr[userId];
+		const current = normalizeUserState(isRecord(userRaw) ? userRaw : {});
 		bsr[userId] = { ...current, ...patch, updatedAt: Date.now() };
+		frontmatter[BSR_FRONTMATTER_KEY] = bsr;
 	});
 }
 
